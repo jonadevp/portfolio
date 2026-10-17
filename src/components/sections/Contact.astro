@@ -27,7 +27,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
       simplemente quieres saludar, ¡haré todo lo posible para responderte!
     </p>
 
-    <form id="contact-form">
+    <form id="contact-form" novalidate>
       <div class="mb-5">
         <label
           for="fullname"
@@ -40,7 +40,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           type="text"
           name="fullname"
           aria-describedby="fullname-error"
-          class="bg-slate-900/20 focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-200 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
+          class="bg-slate-900/20 aria-invalid:border-red-500 aria-invalid:focus:ring-red-500 dark:aria-invalid:border-red-400 focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-200 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
           placeholder="indica tu nombre"
           required
         />
@@ -63,7 +63,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           id="email"
           name="email"
           aria-describedby="email-error"
-          class="bg-slate-900/20 focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-200 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
+          class="bg-slate-900/20 aria-invalid:border-red-500 aria-invalid:focus:ring-red-500 dark:aria-invalid:border-red-400 focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-200 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
           placeholder="example@gmail.com"
           required
         />
@@ -85,7 +85,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           name="message"
           rows="5"
           aria-describedby="message-error"
-          class="bg-slate-900/20 resize-none focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-200 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
+          class="bg-slate-900/20 aria-invalid:border-red-500 aria-invalid:focus:ring-red-500 dark:aria-invalid:border-red-400 resize-none focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-200 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
           placeholder="Tu mensaje"
           required></textarea>
         <span
@@ -180,10 +180,12 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
             return;
           }
 
+          // Nunca se muestra error.message: ante un 429 de Netlify traería
+          // el cuerpo crudo de su respuesta, que puede ser una página entera.
           statusEl.textContent =
             error.code === "BAD_REQUEST"
               ? "No se pudo verificar que eres una persona. Inténtalo de nuevo."
-              : "No se pudo enviar el mensaje. Inténtalo más tarde.";
+              : "No se pudo enviar el mensaje. Espera un minuto e inténtalo de nuevo; si el problema continúa, escríbeme a contacto@jonadevp.com.";
           return;
         }
 
@@ -196,8 +198,10 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
         });
         form.reset();
       } catch {
+        // Aquí solo llegan los fallos de conexión: el cliente de acciones
+        // no captura el rechazo del fetch.
         statusEl.textContent =
-          "No se pudo conectar con el servidor. Inténtalo de nuevo.";
+          "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.";
       } finally {
         if (button) button.disabled = false;
         resetTurnstile();
