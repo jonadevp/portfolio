@@ -2,6 +2,7 @@
 import SectionContainer  from "@components/SectionContainer.astro";
 import SectionTitle  from "@components/SectionTitle.astro";
 import InfoUser from "@icons/InfoUser.astro";
+import me from "../../assets/me.webp";
 ---
 
 <SectionContainer id="sobre-mi" class="flex items-center flex-col lg:flex-row gap-y-4 lg:gap-x-8">
@@ -14,7 +15,7 @@ import InfoUser from "@icons/InfoUser.astro";
      <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
        <div class="space-y-4 font-mono text-slate-600 dark:text-slate-400 leading-relaxed">
        <p class="">
-         Hola 👋, soy <strong>Jonathan Sanchéz Rodríguez</strong> en Github me encuentras como <strong>JonyDevp</strong>.
+         Hola 👋, soy <strong>Jonathan Sanchéz Rodríguez</strong> en Github me encuentras como <strong>JonaDevp</strong>.
        </p>
         <p>
           Mi viaje en el desarrollo web comenzó con la curiosidad de entender cómo funcionaban las páginas de internet. Hoy en día, me especializo en el ecosistema 
@@ -33,11 +34,12 @@ import InfoUser from "@icons/InfoUser.astro";
         <div class="absolute inset-0 border border-solid border-slate-300 dark:border-slate-700 rounded-2xl flex items-center justify-center transform -rotate-3 transition-transform group-hover:rotate-0 duration-300">
 
           <img
-          class=" rounded-2xl object-cover w-full h-auto"
-          src="src/assets/me.webp"
+          decoding="async"
+          class=" rounded-2xl object-cover size-full"
+          src={me.src}
           alt="Jonathan Sanchez"
-          width="959"
-          height="960"
+          width={me.width}
+          height={me.height}
           loading="lazy"
           />
         </div>
