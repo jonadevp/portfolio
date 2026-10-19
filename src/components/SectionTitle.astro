@@ -1,8 +1,8 @@
 ---
-const { title } = Astro.props;
+const { title, class: className } = Astro.props;
 ---
 
-<h2 class="text-3xl pb-3 mb-4 lg:mb-0 font-semibold relative flex items-center gap-x-2 before:absolute before:content-[''] before:bottom-0 before:left-0 before:w-12 before:h-1 before:bg-indigo-500 before:shadow-[0_0_12px_oklch(62.3%_0.214_259.815)] before:rounded-full">
+<h2 class:list={["text-3xl pb-3 mb-4 lg:mb-0 font-semibold relative flex items-center gap-x-2 before:absolute before:content-[''] before:bottom-0 before:left-0 before:w-12 before:h-1 before:bg-indigo-500 before:shadow-[0_0_12px_oklch(62.3%_0.214_259.815)] before:rounded-full", className]}>
   <slot name="icon-left" />
   {title}
 </h2>
