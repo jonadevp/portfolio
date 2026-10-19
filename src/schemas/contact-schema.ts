@@ -56,7 +56,7 @@ export const messageSchema = z
   .string({ error: 'El mensaje es requerido' })
   .trim()
   .min(1, 'El mensaje es requerido')
-  .max(500, 'El mensaje es demasiado largo')
+  .max(300, 'El mensaje es demasiado largo')
   .refine((message) => !LINK_REGEX.test(message), {
     message: 'No se permiten enlaces en el mensaje',
   });
