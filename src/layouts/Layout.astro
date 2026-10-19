@@ -3,7 +3,7 @@ import { Font } from "astro:assets";
 import "../styles/global.css";
 import Header from "@components/Header.astro";
 import { ClientRouter } from "astro:transitions";
-
+import ScrollToTop from "@components/ScrollToTop.astro";
 interface Props {
   title: string;
   description: string;
@@ -55,6 +55,7 @@ const { title, description } = Astro.props;
       class="fixed hidden dark:block inset-0 -z-10 size-full bg-neutral-950 bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px),radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] bg-size-[14px_24px,14px_24px,auto]">
     </div>
     <Header />
+    <ScrollToTop />
     <slot />
   </body>
 </html>
