@@ -6,7 +6,7 @@ import {
   emailSchema,
   fullNameSchema,
   messageSchema,
-} from '@/schemas/contact-schema';
+} from '@schemas/contact-schema';
 
 const resend = new Resend(RESEND_API_KEY);
 
