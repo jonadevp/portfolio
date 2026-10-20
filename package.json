@@ -13,10 +13,13 @@
   },
   "dependencies": {
     "@astrojs/netlify": "^8.2.9",
+    "@astrojs/preact": "^6.1.0",
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.3.2",
     "canvas-confetti": "^1.9.4",
+    "preact": "^11.0.1",
     "resend": "^6.32.1",
+    "sileo": "^0.1.6",
     "tailwindcss": "4.3.3"
   },
   "allowScripts": {

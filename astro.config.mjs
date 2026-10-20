@@ -3,8 +3,10 @@ import tailwindcss from "@tailwindcss/vite";
 import netlify from "@astrojs/netlify";
 
 
-export default defineConfig({
+import preact from "@astrojs/preact";
 
+
+export default defineConfig({
   env: {
   schema:{
     RESEND_API_KEY: envField.string({ context: "server", access: "secret" }),
@@ -15,7 +17,11 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ["sileo", "motion", "framer-motion"],
+    },
   },
+
 
   fonts: [
     {
@@ -98,6 +104,7 @@ export default defineConfig({
       },
     },
   ],
+
   adapter: netlify({
     devFeatures: {
       images: true,
@@ -105,4 +112,6 @@ export default defineConfig({
       edgeFunctions: false,
     },
   }),
+
+  integrations: [preact({ compat: true})],
 });

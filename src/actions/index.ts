@@ -63,6 +63,11 @@ export const server = {
         });
       }
 
+      if (import.meta.env.DEV) {
+        console.log('[DEV] Correo no enviado:', { fullname, email, message });
+        return { ok: true };
+      }
+
       const { error } = await resend.emails.send({
         from: 'jonadevp.com <contacto@jonadevp.com>',
         to: ['jonadevp@gmail.com'],

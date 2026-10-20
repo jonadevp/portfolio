@@ -148,7 +148,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 <script>
   import { actions, isInputError } from "astro:actions";
   import confetti from "canvas-confetti";
-
+  import { sileo } from "sileo";
   let controller: AbortController | undefined;
 
   function initContactForm() {
@@ -218,35 +218,34 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
                 shown = true;
               }
               if (!shown) {
-                statusEl.textContent =
-                  "Completa la verificación e inténtalo de nuevo.";
+                sileo.warning({title: "Completa la verificación e inténtalo de nuevo"})
+
               }
               return;
             }
 
             // Nunca se muestra error.message: ante un 429 de Netlify traería
             // el cuerpo crudo de su respuesta, que puede ser una página entera.
-            statusEl.textContent =
-              error.code === "BAD_REQUEST"
-                ? "No se pudo verificar que eres una persona. Inténtalo de nuevo."
-                : "No se pudo enviar el mensaje. Espera un minuto e inténtalo de nuevo; si el problema continúa, escríbeme a contacto@jonadevp.com.";
+            sileo.error({ title: "Algo salio mal", description:  error.code === "BAD_REQUEST"
+                 ? "No se pudo verificar que eres una persona. Inténtalo de nuevo."
+                : "No se pudo enviar el mensaje. Espera un minuto e inténtalo de nuevo; si el problema continúa, escríbeme a contacto@jonadevp.com."})
             return;
           }
 
-          statusEl.textContent = "Mensaje enviado. Te responderé pronto.";
+        
           confetti({
             particleCount: 120,
             spread: 70,
             origin: { y: 0.7 },
             disableForReducedMotion: true,
           });
+          sileo.success({ title: "exito", description: "Mensaje enviado" });
           form.reset();
           updateCounter();
         } catch {
           // Aquí solo llegan los fallos de conexión: el cliente de acciones
           // no captura el rechazo del fetch.
-          statusEl.textContent =
-            "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.";
+        sileo.error({ title: "Algo salio mal", description: "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo"})
         } finally {
           if (button) button.disabled = false;
           resetTurnstile();
