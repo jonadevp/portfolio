@@ -8,6 +8,8 @@ import {
   messageSchema,
 } from '@schemas/contact-schema';
 import { contactRatelimit } from "@services/rate-limit";
+import { notificationHtml, notificationSubject } from '@/utils/email-templates'; 
+
 const resend = new Resend(RESEND_API_KEY);
 
 const SITEVERIFY_URL =
@@ -53,8 +55,20 @@ export const server = {
         .min(1, 'Completa la verificación'),
     }),
     handler: async (input, context) => {
-      const { success } = await contactRatelimit.limit(context.clientAddress);
-      if (!success) {
+
+      let allowed: boolean;
+
+      try {
+        ({ success: allowed } = await contactRatelimit.limit(context.clientAddress));
+      } catch (error) {
+        console.error("Upstash no disponible:", error);
+        throw new ActionError({
+          code: "SERVICE_UNAVAILABLE",
+          message: "Servicio no disponible.",
+        });
+      }
+      
+      if (!allowed) {
         throw new ActionError({
           code: "TOO_MANY_REQUESTS",
           message: "Demasiados intentos. Inténtalo de nuevo en unos minutos.",
@@ -80,7 +94,8 @@ export const server = {
         from: 'jonadevp.com <contacto@jonadevp.com>',
         to: ['jonadevp@gmail.com'],
         replyTo: email,
-        subject: `Nuevo mensaje de ${fullname}`,
+        subject: notificationSubject(fullname),
+        html: notificationHtml({ fullname, email, message }),
         text: `Nombre: ${fullname}\nCorreo: ${email}\n\n${message}`,
       });
 

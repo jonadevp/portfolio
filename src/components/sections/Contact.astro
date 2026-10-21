@@ -160,7 +160,7 @@ import {
   import confetti from "canvas-confetti";
   import { sileo } from "sileo";
   import { toastColors } from "@/types/toast-type";
-import { MESSAGE_MAX_LENGTH } from "@/constants/contact";
+  import { MESSAGE_MAX_LENGTH } from "@/constants/contact";
 
   let controller: AbortController | undefined;
 
@@ -240,8 +240,8 @@ import { MESSAGE_MAX_LENGTH } from "@/constants/contact";
               }
               return;
             }
-              // Nunca se muestra error.message: ante un 429 de Netlify traería
-              // el cuerpo crudo de su respuesta, que puede ser una página entera.
+            // Nunca se muestra error.message: ante un 429 de Netlify traería
+            // el cuerpo crudo de su respuesta, que puede ser una página entera.
             if (error.code === "TOO_MANY_REQUESTS") {
               sileo.warning({
                 title: "Demasiados intentos",
@@ -249,13 +249,19 @@ import { MESSAGE_MAX_LENGTH } from "@/constants/contact";
                   "Has enviado varios mensajes seguidos. Espera unos minutos e inténtalo de nuevo.",
                 ...toastColors("warning"),
               });
-
             } else if (error.code === "BAD_REQUEST") {
               sileo.warning({
                 title: "Verificación",
                 description:
                   "No se pudo verificar que eres una persona. Inténtalo de nuevo.",
                 ...toastColors("warning"),
+              });
+            } else if (error.code === "SERVICE_UNAVAILABLE") {
+              sileo.error({
+                title: "Servicio no disponible",
+                description:
+                  "De momento no puedo recibir más correos. Inténtalo más tarde.",
+                ...toastColors("error"),
               });
             } else {
               sileo.error({
@@ -277,7 +283,7 @@ import { MESSAGE_MAX_LENGTH } from "@/constants/contact";
           sileo.success({
             title: "Mensaje enviado",
             description:
-              "Gracias por tu mensaje, me pondre en contacto contigo lo mas pronto posible",
+              "Gracias por tu mensaje, me pondré en contacto contigo lo mas pronto posible",
             ...toastColors("success"),
           });
           form.reset();
