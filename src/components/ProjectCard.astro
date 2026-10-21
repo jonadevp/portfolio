@@ -12,7 +12,7 @@ const { project, class: className } = Astro.props;
 ---
 
 <article
-  class={`relative bg-linear-to-bl from-slate-50 to-yellow-50 dark:from-slate-600/20 dark:to-indigo-900/20 flex flex-col lg:flex-row gap-4 overflow-hidden rounded-xl backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/20 p-4 shadow-sm col-span-10 group hover:shadow-lg transition-shadow ${className ?? ""}`}
+  class={`relative dark:bg-linear-to-bl bg-gray-50 dark:bg-transparent dark:from-slate-600/20 dark:to-indigo-900/20 flex flex-col lg:flex-row gap-4 overflow-hidden rounded-xl backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/20 p-4 shadow-sm col-span-10 group hover:shadow-lg transition-shadow ${className ?? ""}`}
 >
   {
     project.thumbnail_img ? (
@@ -51,7 +51,7 @@ const { project, class: className } = Astro.props;
       </h3>
     </header>
 
-    <div class="flex items-center gap-4">
+    <div class="flex flex-wrap items-center gap-4">
       {
         project.tags.map((tag) => {
           const Icon = tag.icon;
@@ -64,7 +64,7 @@ const { project, class: className } = Astro.props;
       }
     </div>
 
-    <p class="font-mono">{project.description}</p>
+    <p class="text-base text-slate-600 dark:text-slate-400">{project.description}</p>
 
     <footer class="mt-4">
         {project.link && <ButtonLink href={project.link} label="Consultar" />}
