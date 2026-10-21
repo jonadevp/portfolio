@@ -39,6 +39,7 @@ const { title, description } = Astro.props;
           (theme === "system" &&
             window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.dataset.theme = theme;
       })();
     </script>
   </head>
