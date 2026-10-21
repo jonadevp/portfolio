@@ -9,8 +9,7 @@
       <span class="size-3 rounded-full bg-green-300 inline-block"></span>
     </div>
 
-    <span class="font-mono text-sm text-white/70">jonadevp@gmail.com</span
-    >
+    <span class="font-mono text-sm text-white/70">jonadevp</span>
     <div class="flex items-center gap-x-4">
       <button
         id="terminal-copy-btn"
@@ -42,162 +41,177 @@
       </button>
     </div>
   </div>
+
   <!-- Interactive terminal body -->
   <div
     id="terminal-screen"
     class="font-mono text-sm leading-relaxed flex flex-col p-4 h-80 overflow-y-auto *:shrink-0"
   >
-    <!-- Command 1 -->
+    <!-- Command 1 (visible desde el inicio) -->
     <div class="term-line flex items-center gap-2">
       <span class="text-emerald-500 font-bold"> visitor@devcore:~$ </span>
-      <span class="text-white/90 font-bold term-cmd" data-cmd="whoami">whoami</span>
+      <span class="text-white/90 font-bold term-cmd" data-cmd="whoami"></span>
+      <span class="term-cursor w-2 h-4 bg-emerald-400 inline-block"></span>
     </div>
 
     <!-- output command 1 -->
-    <span class="term-output text-white/90 pl-4">
+    <span hidden class="term-output text-white/90 pl-4">
       &gt; Jonathan Sanchez • Full-Stack &amp; Distributed Systems Architect
       [L6]
     </span>
 
     <!-- Command 2 -->
-    <div class="term-line flex items-center gap-2 pt-4">
+    <div hidden class="term-line flex items-center gap-2 pt-4">
       <span class="text-emerald-500 font-bold"> visitor@devcore:~$ </span>
-      <span class="text-white/90 font-bold term-cmd" data-cmd="cat /etc/core-stack.json">cat /etc/core-stack.json</span>
+      <span
+        class="text-white/90 font-bold term-cmd"
+        data-cmd="cat /etc/core-stack.json"></span>
     </div>
 
     <!-- output command 2 -->
-    <div class="term-output text-white/90 pl-4 flex flex-col">
-      <span class="text-slate-400">{'{'}</span>
+    <div hidden class="term-output text-white/90 pl-4 flex flex-col">
+      <span class="text-slate-400">{"{"}</span>
       <span class="pl-4">
-         "frontend": ["Next.js", "Angular", "Astro", "Tailwind
-         CSS", "shadcn/ui"],
+        "frontend": ["Next.js", "Angular", "Astro", "Tailwind CSS", "shadcn/ui"],
       </span>
-
-      <span class="pl-4">
-        "data": ["Prisma ORM", "SQL", "PostgreSQL"],
-      </span>
-
-      <span class="pl-4">
-        "focus": "e-commerce_multicanal"
-      </span>
-
-      <span class="text-slate-400">{'}'}</span>
+      <span class="pl-4">"data": ["Prisma ORM", "SQL", "PostgreSQL"],</span>
+      <span class="pl-4">"focus": "e-commerce_multicanal"</span>
+      <span class="text-slate-400">{"}"}</span>
     </div>
 
     <!-- Command 3 -->
-     <div class="term-line flex items-center gap-2 pt-4">
+    <div hidden class="term-line flex items-center gap-2 pt-4">
       <span class="text-emerald-500 font-bold"> visitor@devcore:~$ </span>
-      <span class="text-white/90 font-bold term-cmd" data-cmd="git status">git status</span>
-     </div>
+      <span class="text-white/90 font-bold term-cmd" data-cmd="git status"
+      ></span>
+    </div>
 
-     <!-- output command 3 -->
-      <div class="term-output text-white/90 pl-4 flex flex-col">
-        <span>On branch <span class="text-emerald-400">main</span> • +3
-        años de experiencia
+    <!-- output command 3 -->
+    <div hidden class="term-output text-white/90 pl-4 flex flex-col">
+      <span>
+        On branch <span class="text-emerald-400">main</span> • +3 años de
+        experiencia
       </span>
-
       <span class="text-emerald-400">nothing to commit, working tree clean</span>
-      </div>
+    </div>
 
-      <!-- live prompt line -->
-       <div class="term-line flex items-center gap-2 pt-4">
-        <span class="text-emerald-500 font-bold"> visitor@devcore:~$ </span>
-        <span class="text-white/90 font-bold term-cmd" data-cmd="uptime --skills">uptime --skills</span>
-        <span class="term-cursor w-2 h-4 bg-emerald-400 inline-block" />
-       </div>
+    <!-- Command 4 (live prompt line) -->
+    <div hidden class="term-line flex items-center gap-2 pt-4">
+      <span class="text-emerald-500 font-bold"> visitor@devcore:~$ </span>
+      <span
+        class="text-white/90 font-bold term-cmd"
+        data-cmd="uptime --skills"></span>
+    </div>
   </div>
 
   <!-- Windows status bar -->
-   <div class="p-4 bg-slate-800 flex items-center justify-between text-xs text-white/70 font-mono">
-      <span class="flex items-center gap-1">
-        <span class="size-2 rounded-full bg-emerald-500" />
-        UTF-8 • LF
-      </span>
-      <span>Next.js / Node / PostgreSQL</span>
-   </div>
+  <div
+    class="p-4 bg-slate-800 flex items-center justify-between text-xs text-white/70 font-mono"
+  >
+    <span class="flex items-center gap-1">
+      <span class="size-2 rounded-full bg-emerald-500"></span>
+      UTF-8 • LF
+    </span>
+    <span>Next.js / Node / PostgreSQL</span>
+  </div>
 </div>
 
 <script>
- let controller: AbortController | undefined;
+  let controller: AbortController | undefined;
 
-const sleep = (ms: number, signal: AbortSignal): Promise<void> =>
-  new Promise<void>((resolve, reject) => {
-    if (signal.aborted) return reject(signal.reason);
-    const t = setTimeout(resolve, ms);
-    signal.addEventListener(
-      "abort",
-      () => {
-        clearTimeout(t);
-        reject(signal.reason);
-      },
-      { once: true },
-    );
-  });
-
-async function typeText(el: HTMLElement, text: string, signal: AbortSignal): Promise<void> {
-  let typed = "";
-  el.textContent = "";
-  for (const ch of text) {
-    typed += ch;
-    el.textContent = typed;
-    await sleep(95 + Math.random() * 50, signal);
-  }
-}
-
-async function runTerminal(screen: HTMLElement, signal: AbortSignal): Promise<void> {
-  const lines = [...screen.querySelectorAll<HTMLElement>(".term-line")];
-  const cmdEls = [...screen.querySelectorAll<HTMLElement>(".term-cmd")];
-  const outputs = [...screen.querySelectorAll<HTMLElement>(".term-output")];
-  const cursor = screen.querySelector<HTMLElement>(".term-cursor");
-
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    cmdEls.forEach((el) => {
-      el.textContent = el.dataset.cmd ?? "";
+  const sleep = (ms: number, signal: AbortSignal): Promise<void> =>
+    new Promise<void>((resolve, reject) => {
+      if (signal.aborted) return reject(signal.reason);
+      const t = setTimeout(resolve, ms);
+      signal.addEventListener(
+        "abort",
+        () => {
+          clearTimeout(t);
+          reject(signal.reason);
+        },
+        { once: true },
+      );
     });
-    [...lines, ...outputs].forEach((el) => el.classList.remove("hidden"));
-    return;
-  }
 
-  try {
-    while (true) {
-      cmdEls.forEach((el) => {
-        el.textContent = "";
-      });
-      [...lines, ...outputs].forEach((el) => el.classList.add("hidden"));
-      cursor?.classList.remove("terminal-blink");
-      screen.scrollTop = 0;
-
-      for (const [i, cmdEl] of cmdEls.entries()) {
-        const line = lines[i];
-        line?.classList.remove("hidden");
-        if (cursor && line) line.appendChild(cursor);
-        screen.scrollTop = screen.scrollHeight;
-        await typeText(cmdEl, cmdEl.dataset.cmd ?? "", signal);
-        await sleep(350, signal);
-        outputs[i]?.classList.remove("hidden");
-        screen.scrollTop = screen.scrollHeight;
-        await sleep(600, signal);
-      }
-
-      cursor?.classList.add("terminal-blink");
-      await sleep(6000, signal);
+  async function typeText(
+    el: HTMLElement,
+    text: string,
+    signal: AbortSignal,
+  ): Promise<void> {
+    let typed = "";
+    el.textContent = "";
+    for (const ch of text) {
+      typed += ch;
+      el.textContent = typed;
+      await sleep(95 + Math.random() * 50, signal);
     }
-  } catch (e) {
-    if (!(e instanceof DOMException && e.name === "AbortError")) throw e;
   }
-}
 
-function init(): void {
-  const screen = document.getElementById("terminal-screen");
-  if (!screen) return;
-  controller?.abort();
-  controller = new AbortController();
-  void runTerminal(screen, controller.signal);
-}
+  async function runTerminal(
+    screen: HTMLElement,
+    signal: AbortSignal,
+  ): Promise<void> {
+    const lines = [...screen.querySelectorAll<HTMLElement>(".term-line")];
+    const cmdEls = [...screen.querySelectorAll<HTMLElement>(".term-cmd")];
+    const outputs = [...screen.querySelectorAll<HTMLElement>(".term-output")];
+    const cursor = screen.querySelector<HTMLElement>(".term-cursor");
 
-document.addEventListener("astro:before-swap", () => controller?.abort());
-document.addEventListener("astro:page-load", init);
-init();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cmdEls.forEach((el) => {
+        el.textContent = el.dataset.cmd ?? "";
+      });
+      [...lines, ...outputs].forEach((el) => {
+        el.hidden = false;
+      });
+      const last = lines.at(-1);
+      if (cursor && last) last.appendChild(cursor);
+      cursor?.classList.add("terminal-blink");
+      return;
+    }
+
+    try {
+      while (true) {
+        cmdEls.forEach((el) => {
+          el.textContent = "";
+        });
+        [...lines, ...outputs].forEach((el) => {
+          el.hidden = true;
+        });
+        cursor?.classList.remove("terminal-blink");
+        screen.scrollTop = 0;
+
+        for (const [i, cmdEl] of cmdEls.entries()) {
+          const line = lines[i];
+          const output = outputs[i];
+          if (line) line.hidden = false;
+          if (cursor && line) line.appendChild(cursor);
+          screen.scrollTop = screen.scrollHeight;
+          await typeText(cmdEl, cmdEl.dataset.cmd ?? "", signal);
+          await sleep(350, signal);
+          if (output) output.hidden = false;
+          screen.scrollTop = screen.scrollHeight;
+          await sleep(600, signal);
+        }
+
+        cursor?.classList.add("terminal-blink");
+        await sleep(6000, signal);
+      }
+    } catch (e) {
+      if (!(e instanceof DOMException && e.name === "AbortError")) throw e;
+    }
+  }
+
+  function init(): void {
+    const screen = document.getElementById("terminal-screen");
+    if (!screen) return;
+    controller?.abort();
+    controller = new AbortController();
+    void runTerminal(screen, controller.signal);
+  }
+
+  document.addEventListener("astro:before-swap", () => controller?.abort());
+  document.addEventListener("astro:page-load", init);
+  init();
 </script>
 
 <style is:inline>
