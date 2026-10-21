@@ -1,13 +1,13 @@
 import { defineAction, ActionError } from 'astro:actions';
 import { z } from 'astro/zod';
-import { Resend } from 'resend';
 import { RESEND_API_KEY, TURNSTILE_SECRET_KEY } from 'astro:env/server';
+import { Resend } from 'resend';
 import {
   emailSchema,
   fullNameSchema,
   messageSchema,
 } from '@schemas/contact-schema';
-
+import { contactRatelimit } from "@services/rate-limit";
 const resend = new Resend(RESEND_API_KEY);
 
 const SITEVERIFY_URL =
@@ -52,7 +52,15 @@ export const server = {
         .string({ error: 'Completa la verificación' })
         .min(1, 'Completa la verificación'),
     }),
-    handler: async (input) => {
+    handler: async (input, context) => {
+      const { success } = await contactRatelimit.limit(context.clientAddress);
+      if (!success) {
+        throw new ActionError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Demasiados intentos. Inténtalo de nuevo en unos minutos.",
+        });
+      }
+
       const { fullname, email, message } = input;
 
       const human = await verifyTurnstile(input['cf-turnstile-response']);

@@ -3,23 +3,27 @@ import SectionContainer from "@components/SectionContainer.astro";
 import SectionTitle from "@components/SectionTitle.astro";
 import User from "@icons/User.astro";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import {
+  NAME_MAX_LENGTH,
+  EMAIL_MAX_LENGTH,
+  MESSAGE_MAX_LENGTH,
+} from "@/constants/contact";
 ---
 
 <SectionContainer id="contacto" class="max-w-2xl mx-auto">
- <div class="flex flex-col items-center">
-   <p class="font-mono text-primary-600 dark:text-primary-500 mb-2 text-sm">
-     ¿Qué sigue?
-   </p>
-   <SectionTitle title="Ponte en contacto" class="">
-     <User
-       class:list={"size-8 text-slate-900 dark:text-slate-300"}
-       slot="icon-left"
-     />
-   </SectionTitle>
- </div>
+  <div class="flex flex-col items-center">
+    <p class="font-mono text-primary-600 dark:text-primary-500 mb-2 text-sm">
+      ¿Qué sigue?
+    </p>
+    <SectionTitle title="Ponte en contacto" class="">
+      <User
+        class:list={"size-8 text-slate-900 dark:text-slate-300"}
+        slot="icon-left"
+      />
+    </SectionTitle>
+  </div>
 
   <div class="mt-4">
-   
     <!-- <h2
       class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6"
     >
@@ -45,6 +49,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           aria-describedby="fullname-error"
           class="bg-white dark:bg-slate-900/20 aria-invalid:border-red-500 aria-invalid:focus:ring-red-500 dark:aria-invalid:border-red-400 focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-300 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
           placeholder="indica tu nombre"
+          maxlength={NAME_MAX_LENGTH}
           required
         />
         <span
@@ -68,6 +73,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           aria-describedby="email-error"
           class="bg-white dark:bg-slate-900/20 aria-invalid:border-red-500 aria-invalid:focus:ring-red-500 dark:aria-invalid:border-red-400 focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-300 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
           placeholder="example@gmail.com"
+          maxlength={EMAIL_MAX_LENGTH}
           required
         />
         <span
@@ -87,10 +93,10 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           id="message"
           name="message"
           rows="5"
-          maxlength="300"
           aria-describedby="message-error"
           class="bg-white dark:bg-slate-900/20 aria-invalid:border-red-500 aria-invalid:focus:ring-red-500 dark:aria-invalid:border-red-400 resize-none focus:outline-0 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition border border-slate-300 dark:border-slate-500/30 text-heading text-sm rounded-lg block w-full px-4 py-2 shadow-xs placeholder:text-body"
           placeholder="Tu mensaje"
+          maxlength={MESSAGE_MAX_LENGTH}
           required></textarea>
 
         <div class="flex items-center justify-between mt-1">
@@ -101,7 +107,8 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 
           <span
             id="count-characters-msg"
-            class="text-xs pr-4 text-slate-600 dark:text-slate-400">0/300</span
+            class="text-xs pr-4 text-slate-600 dark:text-slate-400"
+            >0/{MESSAGE_MAX_LENGTH}</span
           >
         </div>
       </div>
@@ -153,6 +160,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
   import confetti from "canvas-confetti";
   import { sileo } from "sileo";
   import { toastColors } from "@/types/toast-type";
+import { MESSAGE_MAX_LENGTH } from "@/constants/contact";
 
   let controller: AbortController | undefined;
 
@@ -180,13 +188,12 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
       'button[type="submit"]',
     );
 
-    const MAX = 300;
     const messageEl = document.getElementById("message");
     const counterEl = document.getElementById("count-characters-msg");
 
     const updateCounter = () => {
       if (messageEl instanceof HTMLTextAreaElement && counterEl) {
-        counterEl.textContent = `${messageEl.value.length}/${MAX}`;
+        counterEl.textContent = `${messageEl.value.length}/${MESSAGE_MAX_LENGTH}`;
       }
     };
 
@@ -226,17 +233,24 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
               }
               if (!shown) {
                 sileo.warning({
-                  title: "Warning",
+                  title: "Aviso",
                   description: "Completa la verificación e inténtalo de nuevo",
                   ...toastColors("warning"),
                 });
               }
               return;
             }
+              // Nunca se muestra error.message: ante un 429 de Netlify traería
+              // el cuerpo crudo de su respuesta, que puede ser una página entera.
+            if (error.code === "TOO_MANY_REQUESTS") {
+              sileo.warning({
+                title: "Demasiados intentos",
+                description:
+                  "Has enviado varios mensajes seguidos. Espera unos minutos e inténtalo de nuevo.",
+                ...toastColors("warning"),
+              });
 
-            // Nunca se muestra error.message: ante un 429 de Netlify traería
-            // el cuerpo crudo de su respuesta, que puede ser una página entera.
-            if (error.code === "BAD_REQUEST") {
+            } else if (error.code === "BAD_REQUEST") {
               sileo.warning({
                 title: "Verificación",
                 description:
@@ -262,7 +276,8 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
           });
           sileo.success({
             title: "Mensaje enviado",
-            description: "Gracias por tu mensaje, me pondre en contacto contigo lo mas pronto posible",
+            description:
+              "Gracias por tu mensaje, me pondre en contacto contigo lo mas pronto posible",
             ...toastColors("success"),
           });
           form.reset();

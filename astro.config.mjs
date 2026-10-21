@@ -8,17 +8,18 @@ import preact from "@astrojs/preact";
 
 export default defineConfig({
   env: {
-  schema:{
-    RESEND_API_KEY: envField.string({ context: "server", access: "secret" }),
-    TURNSTILE_SITE_KEY: envField.string({ context: "client", access: "public"}),
-    TURNSTILE_SECRET_KEY: envField.string({ context: "server", access: "secret"})   
+  schema: {
+    RESEND_API_KEY:           envField.string({ context: "server", access: "secret" }),
+    TURNSTILE_SITE_KEY:       envField.string({ context: "client", access: "public" }),
+    TURNSTILE_SECRET_KEY:     envField.string({ context: "server", access: "secret" }),
+    UPSTASH_REDIS_REST_URL:   envField.string({ context: "server", access: "secret" }),
+    UPSTASH_REDIS_REST_TOKEN: envField.string({ context: "server", access: "secret" })   
   }
   },
 
   vite: {
     plugins: [tailwindcss()],
   },
-
 
   fonts: [
     {
