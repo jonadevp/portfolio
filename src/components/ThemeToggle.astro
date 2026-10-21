@@ -75,6 +75,16 @@ const THEMES = ["Light", "Dark", "System"];
 </>
 
 <style>
+  .theme-icon {
+    scale: 0;
+  }
+
+  :global(html[data-theme="light"]) #light,
+  :global(html[data-theme="dark"]) #dark,
+  :global(html[data-theme="system"]) #system {
+    scale: 1;
+  }
+
   #themes-menu.open {
     display: inline;
     animation: scale-up-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -116,9 +126,7 @@ const THEMES = ["Light", "Dark", "System"];
   };
 
   const updateIcon = (themePreference: ThemePreference): void => {
-    document.querySelectorAll<HTMLElement>(".theme-icon").forEach((element) => {
-      element.style.scale = element.id === themePreference ? "1" : "0";
-    });
+    document.documentElement.dataset.theme = themePreference;
   };
 
   const updateTheme = (): void => {
