@@ -26,6 +26,7 @@
     "esbuild": true
   },
   "devDependencies": {
-    "@types/canvas-confetti": "^1.9.0"
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^26.6.5"
   }
 }
