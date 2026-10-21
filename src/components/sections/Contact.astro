@@ -5,23 +5,26 @@ import User from "@icons/User.astro";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 ---
 
-<SectionContainer id="contacto" class="">
-  <SectionTitle title="Contacto" class="">
-    <User
-      class:list={"size-8 text-slate-900 dark:text-slate-300"}
-      slot="icon-left"
-    />
-  </SectionTitle>
+<SectionContainer id="contacto" class="max-w-2xl mx-auto">
+ <div class="flex flex-col items-center">
+   <p class="font-mono text-primary-600 dark:text-primary-500 mb-2 text-sm">
+     ¿Qué sigue?
+   </p>
+   <SectionTitle title="Ponte en contacto" class="">
+     <User
+       class:list={"size-8 text-slate-900 dark:text-slate-300"}
+       slot="icon-left"
+     />
+   </SectionTitle>
+ </div>
 
   <div class="mt-4">
-    <p class="font-mono text-primary-600 dark:text-primary-500 mb-2 text-sm">
-      ¿Qué sigue?
-    </p>
-    <h2
+   
+    <!-- <h2
       class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6"
     >
       Ponte en contacto
-    </h2>
+    </h2> -->
     <p class="text-slate-600 dark:text-slate-400 mb-10">
       Actualmente estoy abierto a nuevas oportunidades. Si tienes una pregunta o
       simplemente quieres saludar, ¡haré todo lo posible para responderte!
@@ -105,7 +108,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 
       <div
         id="turnstile-box"
-        class="cf-turnstile"
+        class="cf-turnstile mb-5 flex items-center justify-center"
         data-sitekey={TURNSTILE_SITE_KEY}
         data-appearance="interaction-only"
         data-language="es"
@@ -114,7 +117,7 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 
       <button
         type="submit"
-        class="bg-indigo-800 mx-auto max-w-xl w-full flex items-center justify-center gap-x-2 text-white transition hover:scale-105 active:scale-95 px-4 py-1.5 text-sm cursor-pointer rounded-lg font-medium disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+        class="bg-indigo-800 mx-auto max-w-xl w-full flex items-center justify-center gap-x-2 text-white transition hover:scale-105 active:scale-95 px-4 py-2 text-sm cursor-pointer rounded-lg font-medium disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         Contactar
         <svg
@@ -149,6 +152,8 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
   import { actions, isInputError } from "astro:actions";
   import confetti from "canvas-confetti";
   import { sileo } from "sileo";
+  import { toastColors } from "@/types/toast-type";
+
   let controller: AbortController | undefined;
 
   function initContactForm() {
@@ -167,36 +172,38 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 
     if (!(form instanceof HTMLFormElement) || !statusEl) return;
 
-      controller?.abort();
-      controller = new AbortController();
-      const { signal } = controller;
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
 
-      const button = form.querySelector<HTMLButtonElement>(
-        'button[type="submit"]',
-      );
+    const button = form.querySelector<HTMLButtonElement>(
+      'button[type="submit"]',
+    );
 
-      const MAX = 300;
-      const messageEl = document.getElementById("message");
-      const counterEl = document.getElementById("count-characters-msg");
+    const MAX = 300;
+    const messageEl = document.getElementById("message");
+    const counterEl = document.getElementById("count-characters-msg");
 
-      const updateCounter = () => {
-        if (messageEl instanceof HTMLTextAreaElement && counterEl) {
-          counterEl.textContent = `${messageEl.value.length}/${MAX}`;
-        }
-      };
+    const updateCounter = () => {
+      if (messageEl instanceof HTMLTextAreaElement && counterEl) {
+        counterEl.textContent = `${messageEl.value.length}/${MAX}`;
+      }
+    };
 
-      messageEl?.addEventListener("input", updateCounter, {signal});
+    messageEl?.addEventListener("input", updateCounter, { signal });
 
-      const clearErrors = () => {
-        statusEl.textContent = "";
-        for (const name of FIELDS) {
-          const errorEl = document.getElementById(`${name}-error`);
-          if (errorEl) errorEl.textContent = "";
-          document.getElementById(name)?.removeAttribute("aria-invalid");
-        }
-      };
+    const clearErrors = () => {
+      statusEl.textContent = "";
+      for (const name of FIELDS) {
+        const errorEl = document.getElementById(`${name}-error`);
+        if (errorEl) errorEl.textContent = "";
+        document.getElementById(name)?.removeAttribute("aria-invalid");
+      }
+    };
 
-      form.addEventListener("submit", async (event) => {
+    form.addEventListener(
+      "submit",
+      async (event) => {
         event.preventDefault();
         clearErrors();
         if (button) button.disabled = true;
@@ -211,48 +218,73 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
                 const messages = error.fields[name];
                 if (!messages) continue;
                 const errorEl = document.getElementById(`${name}-error`);
-                if (errorEl) errorEl.textContent = messages.join(" ");
+                if (errorEl) errorEl.textContent = messages[0] ?? "";
                 document
                   .getElementById(name)
                   ?.setAttribute("aria-invalid", "true");
                 shown = true;
               }
               if (!shown) {
-                sileo.warning({title: "Completa la verificación e inténtalo de nuevo"})
-
+                sileo.warning({
+                  title: "Warning",
+                  description: "Completa la verificación e inténtalo de nuevo",
+                  ...toastColors("warning"),
+                });
               }
               return;
             }
 
             // Nunca se muestra error.message: ante un 429 de Netlify traería
             // el cuerpo crudo de su respuesta, que puede ser una página entera.
-            sileo.error({ title: "Algo salio mal", description:  error.code === "BAD_REQUEST"
-                 ? "No se pudo verificar que eres una persona. Inténtalo de nuevo."
-                : "No se pudo enviar el mensaje. Espera un minuto e inténtalo de nuevo; si el problema continúa, escríbeme a contacto@jonadevp.com."})
+            if (error.code === "BAD_REQUEST") {
+              sileo.warning({
+                title: "Verificación",
+                description:
+                  "No se pudo verificar que eres una persona. Inténtalo de nuevo.",
+                ...toastColors("warning"),
+              });
+            } else {
+              sileo.error({
+                title: "Algo salió mal",
+                description:
+                  "No se pudo enviar el mensaje. Espera un minuto e inténtalo de nuevo; si el problema continúa, escríbeme a contacto@jonadevp.com.",
+                ...toastColors("error"),
+              });
+            }
             return;
           }
 
-        
           confetti({
             particleCount: 120,
             spread: 70,
             origin: { y: 0.7 },
             disableForReducedMotion: true,
           });
-          sileo.success({ title: "exito", description: "Mensaje enviado" });
+          sileo.success({
+            title: "Mensaje enviado",
+            description: "Gracias por tu mensaje, me pondre en contacto contigo lo mas pronto posible",
+            ...toastColors("success"),
+          });
           form.reset();
           updateCounter();
         } catch {
           // Aquí solo llegan los fallos de conexión: el cliente de acciones
           // no captura el rechazo del fetch.
-        sileo.error({ title: "Algo salio mal", description: "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo"})
+          sileo.error({
+            title: "Algo salió mal",
+            description:
+              "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo",
+            ...toastColors("error"),
+          });
         } finally {
           if (button) button.disabled = false;
           resetTurnstile();
         }
-      }, {signal});
+      },
+      { signal },
+    );
 
-      updateCounter();
+    updateCounter();
   }
 
   document.addEventListener("astro:page-load", initContactForm);
