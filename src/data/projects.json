@@ -1,15 +1,15 @@
 [
     {
       "title": "Pagina para recargas electrónicas",
-      "description": "Homepage para recargas electrónicas en su version 3 para ofrecer venta de recargas electrónicas para todo tipo de negocio",
+      "description": "Sitio web del negocio de recargas electrónicas, diseñado y desplegado con Angular y Tailwind para establecer su presencia digital.",
       "thumbnail_img": "src/assets/recarga5g.webp",
       "thumbnail_icon": null,
       "link": "https://recarga5g.com",
       "tags": ["ANGULAR", "TAILWIND", "CONTENTFUL"]
     },
     {
-      "title": "Tienda en linea para Servitae",
-      "description": "Plataforma E-commerce hecha con Wordpress y blocksy",
+      "title": "Sitios web corporativos para Servitae",
+      "description": "Sitios web corporativos en WordPress, con migración y adaptación de plantillas enfocadas en usabilidad (UX/UI) para canalizar la atracción de prospectos hacia WhatsApp Business.",
       "thumbnail_img": null,
       "thumbnail_icon": "WORDPRESS",
       "link": null,
@@ -17,7 +17,7 @@
     },
     {
       "title": "Sistema de gestión de inventario",
-      "description": "Sistema central de inventario con localización física por estantería, auditoría de actividad de usuarios y publicación unificada en canales de venta.",
+      "description": "Sistema central de gestión de inventario en Appsmith, con interfaces en React embebidas mediante iframes y módulos de localización física por estantería, auditoría de actividad de usuarios y publicación unificada en canales de venta.",
       "thumbnail_img": null,
       "thumbnail_icon": "APPSMITH",
       "link": null,
