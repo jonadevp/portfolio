@@ -17,9 +17,6 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    ssr: {
-      noExternal: ["sileo", "motion", "framer-motion"],
-    },
   },
 
 
