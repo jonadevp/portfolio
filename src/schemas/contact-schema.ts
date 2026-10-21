@@ -1,5 +1,13 @@
 import { z } from "astro/zod";
 import { resolveMx } from 'node:dns/promises';
+import { 
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  MESSAGE_MIN_LENGTH,
+  MESSAGE_MAX_LENGTH,
+  EMAIL_MIN_LENGTH,
+  EMAIL_MAX_LENGTH
+ } from "@/constants/contact";
 
 const TYPO_DOMAINS = ["gmial.com", "gmai.com", "yahooo.com", "hotmial.com"];
 
@@ -20,11 +28,18 @@ const FAKE_LOCAL_PARTS = [
 
 const DISPOSABLE_DOMAINS = [
   "tempmail.com",
+  "tempmail.ninja",
   "throwaway.email",
   "10minutemail.com",
   "guerrillamail.com",
   "mailinator.com",
   "yopmail.com",
+  "moravita.com",
+  "necub.com",
+  "tanpony.com",
+  "thoqp.lat",
+  "hidingpost.com",
+  "emailnox.live "
 ];
 
 const LINK_REGEX = /(https?:\/\/|www\.)/i;
@@ -51,8 +66,8 @@ export const emailSchema = z
   .string({ error: "El email es requerido" })
   .trim()
   .toLowerCase()
-  .min(1, "El email es requerido")
-  .max(255, "El email es demasiado largo")
+  .min(EMAIL_MIN_LENGTH, "El email es requerido y debe ser válido")
+  .max(EMAIL_MAX_LENGTH, "El email es demasiado largo")
   .pipe(z.email("El formato del email no es válido"))
   .refine((email) => !TYPO_DOMAINS.includes(getDomain(email)), {
     message: "Verifica que el dominio del email esté bien escrito",
@@ -78,8 +93,8 @@ export const emailSchema = z
 export const fullNameSchema = z
   .string({ error: "El nombre completo es requerido" })
   .trim()
-  .min(7, "El nombre debe tener al menos 7 caracteres")
-  .max(60, "El nombre es demasiado largo")
+  .min(NAME_MIN_LENGTH, `El nombre debe tener al menos ${NAME_MIN_LENGTH} caracteres`)
+  .max(NAME_MAX_LENGTH, "El nombre es demasiado largo")
   .refine((name) => NAME_ALLOWED_REGEX.test(name), {
     message: "El nombre solo puede tener letras y espacios",
   });
@@ -87,8 +102,8 @@ export const fullNameSchema = z
 export const messageSchema = z
   .string({ error: "El mensaje es requerido" })
   .trim()
-  .min(10, "El mensaje debe tener al menos 10 caracteres")
-  .max(300, "El mensaje es demasiado largo")
+  .min(MESSAGE_MIN_LENGTH, `El mensaje debe tener al menos ${MESSAGE_MIN_LENGTH} caracteres`)
+  .max(MESSAGE_MAX_LENGTH, "El mensaje es demasiado largo")
   .refine((message) => !LINK_REGEX.test(message), {
     message: "No se permiten enlaces en el mensaje",
   });
