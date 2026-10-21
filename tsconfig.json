@@ -35,6 +35,9 @@
       ],
       "@schemas/*": [
         "./src/schemas/*"
+      ],
+      "@constants": [
+        "./src/constants/*"
       ]
     },
     "jsx": "react-jsx",
