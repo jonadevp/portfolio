@@ -67,7 +67,7 @@ const { project, class: className } = Astro.props;
     <p class="text-base text-slate-600 dark:text-slate-400">{project.description}</p>
 
     <footer class="mt-4">
-        {project.link && <ButtonLink label="Consultar" ariaLabel="Consultar proyecto" href={project.link} />}
+        {project.link && <ButtonLink label="Consultar" ariaLabel={`Consultar sitio web ${project.title}`} href={project.link} />}
     </footer>
   </div>
 </article>
