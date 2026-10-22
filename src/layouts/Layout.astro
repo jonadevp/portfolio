@@ -10,20 +10,62 @@ import Footer from "@sections/Footer.astro";
 interface Props {
   title: string;
   description: string;
+  image?: string;
+  canonical?: string;
 }
 
-const { title, description } = Astro.props;
+const {
+  description,
+  title,
+  image = "/porfolio.webp",
+  canonical = Astro.url.href,
+} = Astro.props;
+
+const siteUrl = "https://jonadevp.com";
+const ogImage = new URL(image, siteUrl).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${siteUrl}/#person`,
+  name: "Jonathan Sanchez Rodríguez",
+  url: siteUrl,
+  sameAs: ["https://linkedin.com/in/jonadevp", "https://github.com/jonadevp"],
+  jobTitle: "Desarrollador Full Stack",
+  worksFor: {
+    "@type": "Organization",
+    name: "Freelance",
+  },
+};
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <meta name="author" content="Jonathan Sanchez Rodríguez" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="jonadevp · Porfolio" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <title>{title}</title>
     <Font cssVariable="--font-inter" preload />
     <Font cssVariable="--font-plus-jakarta-sans" preload />
@@ -43,6 +85,8 @@ const { title, description } = Astro.props;
         document.documentElement.dataset.theme = theme;
       })();
     </script>
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body
     class="antialiased relative overflow-x-hidden transition-colors duration-300"
