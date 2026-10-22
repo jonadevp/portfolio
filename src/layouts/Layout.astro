@@ -6,49 +6,67 @@ import Header from "@components/Header.astro";
 import ScrollToTop from "@components/ScrollToTop.astro";
 import ToastProvider from "@components/ToastProvider.tsx";
 import Footer from "@sections/Footer.astro";
+import { basics, skills } from "@data/cv.json";
+import me from "../assets/me.webp";
 
 interface Props {
   title: string;
   description: string;
   image?: string;
+  imageAlt?: string;
   canonical?: string;
 }
+
+const siteUrl = Astro.site ?? new URL("https://jonadevp.com");
 
 const {
   description,
   title,
   image = "/porfolio.webp",
-  canonical = Astro.url.href,
+  imageAlt = `${basics.name} · Desarrollador Full Stack`,
+  canonical = new URL(Astro.url.pathname, siteUrl).toString(),
 } = Astro.props;
 
-const siteUrl = "https://jonadevp.com";
 const ogImage = new URL(image, siteUrl).toString();
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${siteUrl}/#person`,
-  name: "Jonathan Sanchez Rodríguez",
-  url: siteUrl,
-  sameAs: ["https://linkedin.com/in/jonadevp", "https://github.com/jonadevp"],
-  jobTitle: "Desarrollador Full Stack",
-  worksFor: {
-    "@type": "Organization",
-    name: "Freelance",
+  "@type": "ProfilePage",
+  url: canonical,
+  mainEntity: {
+    "@type": "Person",
+    "@id": new URL("/#person", siteUrl).toString(),
+    name: basics.name,
+    alternateName: "JonaDevp",
+    url: siteUrl.toString(),
+    image: new URL(me.src, siteUrl).toString(),
+    description: basics.summary,
+    jobTitle: "Desarrollador Full Stack",
+    email: `mailto:${basics.email}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: basics.location.city,
+      addressRegion: basics.location.region,
+      addressCountry: basics.location.countryCode,
+    },
+    knowsAbout: skills.flatMap((skill) => skill.keywords),
+    sameAs: basics.profiles.map((profile) => profile.url),
   },
 };
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="author" content="Jonathan Sanchez Rodríguez" />
+    <meta name="author" content={basics.name} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />
@@ -57,7 +75,8 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:height" content="634" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:site_name" content="jonadevp · Porfolio" />
 
@@ -65,6 +84,7 @@ const jsonLd = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <title>{title}</title>
     <Font cssVariable="--font-inter" preload />
@@ -91,7 +111,6 @@ const jsonLd = {
   <body
     class="antialiased relative overflow-x-hidden transition-colors duration-300"
   >
-    <!-- light theme -->
     <div
       aria-hidden="true"
       class="fixed dark:hidden inset-0 -z-10 size-full bg-white bg-[linear-gradient(to_right,rgba(128,128,128,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.05)_1px,transparent_1px)] bg-size-[14px_24px]"
@@ -101,7 +120,6 @@ const jsonLd = {
       >
       </div>
     </div>
-    <!-- dark theme -->
     <div
       aria-hidden="true"
       class="fixed hidden dark:block inset-0 -z-10 size-full bg-neutral-950 bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px),radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] bg-size-[14px_24px,14px_24px,auto]"
