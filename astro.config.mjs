@@ -7,6 +7,7 @@ import preact from "@astrojs/preact";
 
 
 export default defineConfig({
+  site: "https://jonadevp.com",
   env: {
   schema: {
     RESEND_API_KEY:           envField.string({ context: "server", access: "secret" }),
