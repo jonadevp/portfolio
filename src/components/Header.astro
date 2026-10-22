@@ -22,6 +22,7 @@ import Navbar from "@components/NavBar.astro";
         href="#home"
       >
         <svg
+          aria-hidden="true"
           class="size-6"
           fill="none"
           stroke="currentColor"
@@ -47,9 +48,13 @@ import Navbar from "@components/NavBar.astro";
       <button
         type="button"
         id="toggle-menu"
+        aria-label="Abrir menú"
+        aria-controls="navbar"
+        aria-expanded="false"
         class="p-2 block cursor-pointer lg:hidden"
       >
         <svg
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           stroke="currentColor"
@@ -124,7 +129,7 @@ import Navbar from "@components/NavBar.astro";
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           navItems.forEach((item) => {
-            const active = item.getAttribute("aria-label") === entry.target.id;
+            const active = item.dataset.section === entry.target.id;
             item.classList.toggle("text-white", active);
             item.classList.toggle("bg-slate-800", active);
             item.classList.toggle("text-slate-700", !active);
