@@ -9,7 +9,7 @@ const navItems: MenuItems[] = [
   },
 
   {
-    title: "Sobre mi",
+    title: "Sobre mí",
     label: "sobre-mi",
     url: "/#sobre-mi",
   },
@@ -41,13 +41,14 @@ const navItems: MenuItems[] = [
 ---
 
 <nav
+  aria-label="Navegación principal"
   id="navbar"
   class="header-nav lg:bg-transparent lg:dark:bg-transparent bg-white/30 dark:bg-slate-900/50 w-full flex flex-col items-start justify-center order-3 lg:w-auto lg:flex-row lg:items-center lg:order-2 lg:shadow-none lg:border-0 shadow-lg absolute lg:static top-full left-0 px-4 lg:px-0 pt-2 lg:pt-0 lg:gap-x-8 text-sm font-medium backdrop-blur-md  border border-slate-200 dark:border-slate-500/60 transition duration-300 ease-out opacity-0 -translate-y-2 invisible pointer-events-none data-[open=true]:opacity-100 data-[open=true]:translate-y-0 data-[open=true]:visible data-[open=true]:pointer-events-auto lg:border-transparent lg:backdrop-blur-none lg:opacity-100 lg:translate-y-0 lg:visible lg:pointer-events-auto"
 >
   {
     navItems.map((item) => (
       <a
-        aria-label={item.label}
+        data-section={item.label}
         href={item.url}
         class="py-2 lg:py-1.5 px-4 font-mono text-sm font-semibold text-slate-700 dark:text-slate-300  hover:text-blue-700 transition-all duration-300 ease-out hover:scale-110  rounded-lg"
       >
