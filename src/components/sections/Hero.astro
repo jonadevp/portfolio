@@ -7,14 +7,17 @@ import GitHub from "@icons/GitHub.astro";
 import LinkedIn from "@icons/LinkedIn.astro";
 ---
 
-<SectionContainer class="grid grid-cols-1 lg:grid-cols-12 gap-x-4 items-center">
+<SectionContainer id="home" labelledby="hero-title" class="grid grid-cols-1 lg:grid-cols-12 gap-x-4 items-center">
   <div class="lg:col-span-6 flex flex-col items-start">
     <Badget title="Disponible" />
-    <h1 class="text-4xl lg:text-6xl font-bold">
+    <h1 id="hero-title" class="text-4xl lg:text-6xl font-bold">
+      <span class="block mt-4 mb-2 font-mono text-base lg:text-lg font-semibold text-slate-600 dark:text-slate-400">
+        Jonathan Sánchez · Desarrollador Full Stack
+      </span>
       Construyendo <span
         class="bg-clip-text text-transparent bg-linear-to-r from-indigo-600 via-blue-500 to-purple-600"
       >
-        experiencias tecnologicas unicas</span>
+        experiencias tecnológicas únicas</span>
     </h1>
     <p class="text-slate-600 dark:text-slate-400 lg:pt-4">
       Desarrollador Full-Stack con más de 3 años de experiencia construyendo
@@ -35,7 +38,7 @@ import LinkedIn from "@icons/LinkedIn.astro";
       <ButtonLink
         label="LinkedIn"
         href="https://linkedin.com/in/jonadevp"
-        ariaLabel="LinkedIn de Jonathan "
+        ariaLabel="LinkedIn de Jonathan"
         class="text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-500/30"
       >
        <LinkedIn slot="icon-left" />
