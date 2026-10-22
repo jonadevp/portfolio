@@ -1,8 +1,8 @@
 [
     {
-      "title": "Pagina para recargas electrónicas",
+      "title": "Página para recargas electrónicas",
       "description": "Sitio web del negocio de recargas electrónicas, diseñado y desplegado con Angular y Tailwind para establecer su presencia digital.",
-      "thumbnail_img": "src/assets/recarga5g.webp",
+      "thumbnail_img": "/recarga5g.webp",
       "thumbnail_icon": null,
       "link": "https://recarga5g.com",
       "tags": ["ANGULAR", "TAILWIND", "CONTENTFUL"]
