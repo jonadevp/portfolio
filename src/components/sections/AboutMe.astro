@@ -2,7 +2,6 @@
 import SectionContainer  from "@components/SectionContainer.astro";
 import SectionTitle  from "@components/SectionTitle.astro";
 import InfoUser from "@icons/InfoUser.astro";
-import { Image } from "astro:assets";
 import me from "../../assets/me.webp";
 ---
 
@@ -31,12 +30,13 @@ import me from "../../assets/me.webp";
         <div class="absolute -inset-1 bg-linear-to-tr from-purple-600 to-blue-400 transform -rotate-3 group-hover:rotate-0 opacity-30 group-hover:opacity-50 rounded-2xl blur"></div>
         <div class="absolute inset-0 border border-solid border-slate-300 dark:border-slate-700 rounded-2xl flex items-center justify-center transform -rotate-3 transition-transform group-hover:rotate-0 duration-300">
 
-          <Image
+          <img
+          decoding="async"
           class=" rounded-2xl object-cover size-full"
-          src={me}
-          alt="Foto de Jonathan Sánchez Rodríguez, desarrollador full stack"
-          widths={[384, 768]}
-          sizes="(min-width: 1024px) 384px, 100vw"
+          src={me.src}
+          alt="Jonathan Sanchez"
+          width={me.width}
+          height={me.height}
           loading="lazy"
           />
         </div>
