@@ -1,7 +1,34 @@
+---
+import { basics } from "@data/cv.json";
+
+const year = new Date().getFullYear();
+---
+
 <footer class="py-8 text-center border-t border-slate-200 dark:border-slate-800">
-  <div class="container">
+  <div class="container mx-auto flex flex-col items-center gap-y-3">
+    <ul class="flex flex-wrap items-center justify-center gap-x-6 text-sm font-mono text-slate-600 dark:text-slate-400">
+      {
+        basics.profiles.map((profile) => (
+          <li>
+            <a
+              href={profile.url}
+              rel="me noopener noreferrer"
+              target="_blank"
+              class="hover:text-indigo-500 transition-colors"
+            >
+              {profile.network}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={`mailto:${basics.email}`} class="hover:text-indigo-500 transition-colors">
+          {basics.email}
+        </a>
+      </li>
+    </ul>
     <p class="text-slate-500 dark:text-slate-400 text-sm font-mono">
-        Diseñado y desarrollado con ♥ por JonaDevp
+      © {year} {basics.name} · Diseñado y desarrollado con ♥ por JonaDevp
     </p>
   </div>
 </footer>
