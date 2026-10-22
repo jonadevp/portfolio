@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
   "basics": {
-    "name": "Jonathan Sanchez Rodríguez",
+    "name": "Jonathan Sánchez Rodríguez",
     "label": "Full-Stack Developer",
     "image": "src/assets/me.webp",
     "email": "contacto@jonadevp.com",
@@ -20,6 +20,12 @@
         "network": "GitHub",
         "username": "jonadevp",
         "url": "https://github.com/jonadevp"
+      },
+
+      {
+        "network": "LinkedIn",
+        "username": "jonadevp",
+        "url": "https://linkedin.com/in/jonadevp"
       }
     ]
   },
