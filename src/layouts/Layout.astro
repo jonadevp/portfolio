@@ -43,12 +43,6 @@ const jsonLd = {
     description: basics.summary,
     jobTitle: "Desarrollador Full Stack",
     email: `mailto:${basics.email}`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: basics.location.city,
-      addressRegion: basics.location.region,
-      addressCountry: basics.location.countryCode,
-    },
     knowsAbout: skills.flatMap((skill) => skill.keywords),
     sameAs: basics.profiles.map((profile) => profile.url),
   },
