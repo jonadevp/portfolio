@@ -2,7 +2,7 @@
 const { class: className, ...rest } = Astro.props;
 ---
 
-<svg
+<svg aria-hidden="true"
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 180 180"
   class={`${className || 'size-4'}`}
