@@ -91,7 +91,7 @@ export const server = {
       }
 
       const { error } = await resend.emails.send({
-        from: 'jonadevp.com <contacto@jonadevp.com>',
+        from: 'jonadevp.dev <contacto@jonadevp.com>',
         to: ['jonadevp@gmail.com'],
         replyTo: email,
         subject: notificationSubject(fullname),

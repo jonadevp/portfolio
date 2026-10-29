@@ -15,7 +15,7 @@ export const escapeHtml = (value: string): string =>
 const shortName = (name: string): string => name.trim().slice(0, 60);
 
 export const notificationSubject = (name: string): string =>
-  `Nuevo mensaje de ${shortName(name)} desde jonadevp.com`;
+  `Nuevo mensaje de ${shortName(name)} desde jonadevp.dev`;
 
 type NotificationData = { fullname: string; email: string; message: string };
 
